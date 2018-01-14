@@ -26,11 +26,11 @@ import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.Builder;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -181,30 +181,29 @@ public class Main {
 		OptionGroup pidOptions = new OptionGroup();
 		pidOptions.setRequired(true);
 
-		Option pidNumberOption = OptionBuilder.create(PID_NUMBER_SHORT_CLI_OPTION);
-		pidNumberOption.setLongOpt("pid");
-		pidNumberOption.setDescription("PID number of the Java process to monitor");
-		pidNumberOption.setArgName("INTEGER");
-		pidNumberOption.setArgs(1);
-		pidNumberOption.setType(Number.class);
-		pidOptions.addOption(pidNumberOption);
+		Builder pidNumberOption = Option.builder(PID_NUMBER_SHORT_CLI_OPTION);
+		pidNumberOption.longOpt("pid");
+		pidNumberOption.desc("PID number of the Java process to monitor");
+		pidNumberOption.argName("INTEGER");
+		pidNumberOption.hasArg();
+		pidNumberOption.type(Number.class);
+		pidOptions.addOption(pidNumberOption.build());
 
-		Option pidFileOption = OptionBuilder.create(PID_FILE_SHORT_CLI_OPTION);
-		pidFileOption.setLongOpt("pid-file");
-		pidFileOption.setDescription("Path to a PID file");
-		pidFileOption.setArgName("FILE");
-		pidFileOption.setArgs(1);
-		pidOptions.addOption(pidFileOption);
+		Builder pidFileOption = Option.builder(PID_FILE_SHORT_CLI_OPTION);
+		pidFileOption.longOpt("pid-file");
+		pidFileOption.desc("Path to a PID file");
+		pidFileOption.argName("FILE");
+		pidFileOption.hasArg();
+		pidOptions.addOption(pidFileOption.build());
 
 		/* Linux-specific options */
 		if (SystemUtils.IS_OS_LINUX) {
-			Option systemdUnitOption = OptionBuilder.create(SYSTEMD_UNIT_SHORT_CLI_OPTION);
-			systemdUnitOption.setLongOpt("systemd-unit");
-			systemdUnitOption.setDescription("systemd unit service");
-			systemdUnitOption.setArgName("SERVICE");
-			systemdUnitOption.setArgs(1);
-			;
-			pidOptions.addOption(systemdUnitOption);
+			Builder systemdUnitOption = Option.builder(SYSTEMD_UNIT_SHORT_CLI_OPTION);
+			systemdUnitOption.longOpt("systemd-unit");
+			systemdUnitOption.desc("systemd unit service");
+			systemdUnitOption.argName("SERVICE");
+			systemdUnitOption.hasArg();
+			pidOptions.addOption(systemdUnitOption.build());
 		}
 
 		options.addOptionGroup(pidOptions);
@@ -233,7 +232,7 @@ public class Main {
 	 *             if command-line arguments are invalid.
 	 */
 	private static int getPIDFromCliOptions(String... args) throws NagiosPluginJVMDeadlocksException, ParseException {
-		CommandLine command = new BasicParser().parse(CLI_OPTIONS, args);
+		CommandLine command = new DefaultParser().parse(CLI_OPTIONS, args);
 		int pid = 0;
 
 		if (command.hasOption(PID_NUMBER_SHORT_CLI_OPTION)) {

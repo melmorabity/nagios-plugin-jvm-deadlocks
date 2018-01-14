@@ -1,0 +1,12 @@
+--- src/main/java/com/github/melmorabity/nagios_plugin_jvm_deadlocks/Main.java
++++ src/main/java/com/github/melmorabity/nagios_plugin_jvm_deadlocks/Main.java
+@@ -163,7 +163,8 @@ public class Main {
+ 		}
+ 		int pid = Integer.parseInt(m.group(1));
+ 		if (pid == 0) {
+-			throw new NagiosPluginJVMDeadlocksException("Systemd unit " + unit + " service doesn't exist or is not running");
++			throw new NagiosPluginJVMDeadlocksException(
++					"Systemd unit " + unit + " service doesn't exist or is not running");
+ 		}
+ 		return pid;
+ 	}

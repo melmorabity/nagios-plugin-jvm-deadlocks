@@ -1,4 +1,4 @@
-# nagios-plugin-systemd-service
+# nagios-plugin-jvm-deadlocks
 
 Nagios plugin to check Java deadlocks.
 
